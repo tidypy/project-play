@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play 5.0 - Confidential Investor Pitch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Configuration for Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        blue: {
+                            600: '#2563eb', // Main "Trust" Blue Accent
+                            700: '#1d4ed8',
+                        },
+                        slate: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.7s ease-out forwards',
+                        'slide-in-left': 'slideInLeft 0.7s ease-out forwards',
+                        'slide-in-right': 'slideInRight 0.7s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        slideInLeft: {
+                            '0%': { opacity: 0, transform: 'translateX(-40px)' },
+                            '100%': { opacity: 1, transform: 'translateX(0)' },
+                        },
+                        slideInRight: {
+                            '0%': { opacity: 0, transform: 'translateX(40px)' },
+                            '100%': { opacity: 1, transform: 'translateX(0)' },
+                        },
+        glow: {
+            '0%, 100%': { 
+                boxShadow: '0 0 5px rgba(37, 99, 235, 0), 0 0 10px rgba(37, 99, 235, 0)'
+            },
+            '50%': { 
+                boxShadow: '0 0 15px rgba(37, 99, 235, 0.4), 0 0 20px rgba(37, 99, 235, 0.3)'
+            }
+        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles for Charts and Animations -->
+    <style>
+        body {
+            background-color: #f8fafc; /* bg-slate-50 */
+            color: #334155; /* text-slate-700 */
+        }
+        
+        /* Base page content style */
+        .page-content {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Bar chart bar animation */
+        .bar-chart-bar {
+            height: 0;
+            transition: height 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        /* Donut chart animation */
+        .donut-segment {
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.5, 0, 0.5, 1);
+        }
+
+        /* Flow chart animation */
+        .flow-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .flow-arrow {
+            opacity: 0;
+            transform: scaleX(0.5);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform-origin: left;
+        }
+    </style>
+    <style>
+        @keyframes glitter {
+            0% { background-position: -100% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .glitter-text {
+            background-image: linear-gradient(
+                -60deg, 
+                #1e293b, /* slate-800 */
+                #2563eb, /* blue-600 */
+                #93c5fd, /* light blue */
+                #2563eb, /* blue-600 */
+                #1e293b
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glitter 3s linear infinite;
+            font-weight: 800; /* extrabold */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-700 font-sans leading-relaxed">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-lg border-b border-slate-200">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="relative flex items-center justify-center h-16">
+                <!-- Logo -->
+                <div class="absolute inset-y-0 left-0 flex items-center">
+                    <h1 class="font-sans text-3xl font-bold text-slate-900 tracking-tight">
+                        PLAY<span class="text-blue-600">5.0</span>
+                    </h1>
+                </div>
+                
+                <!-- Navigation Tabs -->
+                <div class="hidden md:flex items-center justify-center">
+                    <div class="flex items-baseline space-x-4">
+                        <button class="nav-tab px-4 py-2 rounded-lg text-sm font-medium" data-page="opportunity">The Opportunity</button>
+                        <button class="nav-tab px-4 py-2 rounded-lg text-sm font-medium" data-page="team">The Turnaround Team</button>
+                        <button class="nav-tab px-4 py-2 rounded-lg text-sm font-medium" data-page="deal">The Deal</button>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="absolute inset-y-0 right-0 flex items-center md:hidden">
+                    <button type="button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-800 hover:bg-slate-100 focus:outline-none" id="mobile-menu-button">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-slate-200">
+                <button class="nav-tab block px-3 py-2 rounded-lg text-base font-medium w-full text-left" data-page="opportunity">The Opportunity</button>
+                <button class="nav-tab block px-3 py-2 rounded-lg text-base font-medium w-full text-left" data-page="team">The Turnaround Team</button>
+                <button class="nav-tab block px-3 py-2 rounded-lg text-base font-medium w-full text-left" data-page="deal">The Deal</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Page 1: The Opportunity -->
+        <section id="opportunity-page" class="page-content py-12 md:py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Headline -->
+                <div class="text-center animate-fade-in" style="animation-delay: 0.1s;">
+                    <h2 class="text-base font-semibold text-blue-600 tracking-wide uppercase">The Opportunity</h2>
+                    <p class="mt-2 text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight">
+                        A Proven Market. A Failing Asset.
+                        <br class="hidden md:block" />
+                        <span class="text-blue-600">$ 1.3M + Opportunity.</span>
+                    </p>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
+                    <!-- Section 1: The Distressed Asset -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 animate-slide-in-left" style="animation-delay: 0.3s;">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4">The Distressed Asset</h3>
+                        <p class="text-slate-600 mb-6">
+                            Currently owned by <span class="text-slate-800 font-semibold">FAIRVIEW NIGHTLIFE LLC</span>, which is <span class="text-red-600 font-bold">'FRANCHISE TAX INVOLUNTARILY ENDED'</span> and <span class="text-red-600 font-bold">'INACTIVE.'</span> The current owner, Gregorio Ramos Jr., has failed to pay taxes and has abandoned all marketing.
+                        </p>
+                        <div class="bg-slate-100/70 p-6 rounded-lg text-center">
+                            <span class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Current Projected Revenue</span>
+                            <div class="text-6xl font-extrabold text-red-600 mt-2">$350,000<span class="text-4xl text-red-700">/yr</span></div>
+                            <div class="text-slate-400 mt-2">from "Play" & "Pause" bars</div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: The Thriving Market -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 animate-slide-in-right" style="animation-delay: 0.3s;">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4">The Thriving Market</h3>
+                        <p class="text-slate-600 mb-6">
+                            Direct competitors of the same size are thriving. 'Play' is <span class="font-bold text-slate-800">woefully underperforming</span>, despite being double the size of its nearest competitor.
+                        </p>
+                        <!-- Updated Bar Chart with Real Data -->
+                        <div class="w-full">
+                            <h4 class="text-lg font-semibold text-slate-900 mb-3">Annual Revenue vs. Local Comps</h4>
+                            <div class="h-64 w-full bg-slate-100/70 rounded-lg p-4 flex justify-around items-end space-x-2" id="bar-chart-container">
+                                <!-- Bars will be injected by JS -->
+                                <div class="flex flex-col items-center h-full justify-end">
+                                    <div id="bar-play" class="bar-chart-bar w-12 md:w-16 bg-slate-300 rounded-t-md" data-height="22%" title="Play | Annual: $933,066 | Monthly Avg: $77,755"></div>
+                                    <div class="text-xs font-medium text-slate-500 mt-2 text-center">PLAY<br><span class="font-bold text-slate-600">$0.9M</span></div>
+                                </div>
+                                <div class="flex flex-col items-center h-full justify-end">
+                                    <div id="bar-comp1" class="bar-chart-bar w-12 md:w-16 bg-blue-600 rounded-t-md" data-height="93%" title="JR's | Annual: $3,918,987 | Monthly Avg: $326,582"></div>
+                                    <div class="text-xs font-medium text-slate-500 mt-2 text-center">JR'S<br><span class="font-bold text-slate-600">$3.9M</span></div>
+                                </div>
+                                <div class="flex flex-col items-center h-full justify-end">
+                                    <div id="bar-comp2" class="bar-chart-bar w-12 md:w-16 bg-blue-600 rounded-t-md" data-height="65%" title="Crocker | Annual: $2,734,065 | Monthly Avg: $227,838"></div>
+                                    <div class="text-xs font-medium text-slate-500 mt-2 text-center">CROCKER<br><span class="font-bold text-slate-600">$2.7M</span></div>
+                                </div>
+                                <div class="flex flex-col items-center h-full justify-end">
+                                    <div id="bar-comp3" class="bar-chart-bar w-12 md:w-16 bg-blue-600 rounded-t-md" data-height="64%" title="Ripcord | Annual: $2,683,285 | Monthly Avg: $223,607"></div>
+                                    <div class="text-xs font-medium text-slate-500 mt-2 text-center">RIPCORD<br><span class="font-bold text-slate-600">$2.7M</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="mt-16 text-center animate-fade-in" style="animation-delay: 0.5s;">
+                    <p class="text-2xl md:text-3xl font-semibold text-slate-800 max-w-4xl mx-auto">
+                        With professional management and marketing, 'Play' can capture its share of the market, projecting <span class="text-blue-600 font-bold">$800k+ in Year 1 revenue.</span>
+                    </p>
+                </div>
+
+                <!-- Digital Opportunity Section -->
+                <div class="mt-16 bg-white p-8 rounded-2xl shadow-lg border border-slate-200 animate-fade-in" style="animation-delay: 0.7s;">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2">🔍 The Digital Turnaround Opportunity</h3>
+                        <p class="text-slate-600 max-w-3xl mx-auto">
+                            The property's current low online visibility is not a weakness, but our greatest strength. It demonstrates a massive, untapped market that can be immediately reached with professional digital marketing—proving the core of our investment thesis.
+                        </p>
+                    </div>
+                    <div class="mt-8">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3463.985923360248!2d-95.3929914888882!3d29.74774633181826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8640bf002951d0ad%3A0x4a5f194203280aef!2sPlay!5e0!3m2!1sen!2sus"
+                            width="100%" 
+                            height="450" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            class="rounded-lg border border-slate-300">
+                        </iframe>
+                        <p class="text-center text-sm text-slate-500 mt-4">
+                            Figure 2: The venue's current Google Maps presence.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Page 2: The Turnaround Team -->
+        <section id="team-page" class="page-content py-12 md:py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Headline -->
+                <div class="text-center animate-fade-in" style="animation-delay: 0.1s;">
+                    <h2 class="text-base font-semibold text-blue-600 tracking-wide uppercase">The Turnaround Team</h2>
+                    
+                    <p class="mt-2 text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight">
+                        The Skill, The Admin, and The Growth.
+                    </p>
+                </div>
+
+                <!-- Team Grid -->
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-8 gap-10">
+                    <!-- Jason -->
+                    <div class="md:col-span-3 bg-white p-8 rounded-2xl shadow-lg border border-slate-200 animate-fade-in" style="animation-delay: 0.3s;">
+                        <h3 class="text-2xl font-bold text-blue-600"> Jason Slawitz </h3>
+                        <p class="text-lg font-semibold text-slate-800 mb-4">Operations & Fabrication</p>
+                        <p class="text-slate-600">
+                            Jason is the 'sweat equity' specialist who has successfully built and flipped multiple venues. Below is a live portfolio showcasing his turnaround capabilities.
+                        </p>
+                        
+                        <!-- Embedded Portfolio -->
+                        <div class="my-6">
+                            <iframe 
+                                src="https://bjserviceshtx.com/showcase.html"
+                                title="Jason's Turnaround Project Showcase"
+                                class="w-full rounded-lg border border-slate-200"
+                                height="400">
+                            </iframe>
+                        </div>
+
+                        <blockquote class="border-l-4 border-blue-600 pl-4 italic text-slate-500">
+                            "Jason's fabrication work is second to none. He turned our space around on a tight budget."
+                            
+                            <span class="block text-right text-sm text-slate-400 not-italic mt-2">- Past Client Information Available Upon Request </span>
+                        </blockquote>
+                    </div>
+
+                    <!-- Brian -->
+                    <div class="md:col-span-2 bg-white p-8 rounded-2xl shadow-lg border border-slate-200 animate-fade-in" style="animation-delay: 0.5s;">
+                        <h3 class="text-2xl font-bold text-blue-600">Brian Powell</h3>
+                        <p class="text-lg font-semibold text-slate-800 mb-4">Administration & Finance</p>
+                        <p class="text-slate-600">
+                            Brian will manage all compliance, financials, and back-office operations, ensuring the business is run professionally from Day 1. His meticulous oversight guarantees clean books, proper licensing, and efficient payroll.
+                        </p>
+                    </div>
+
+                    <!-- You -->
+                    <div class="md:col-span-3 bg-white p-8 rounded-2xl shadow-lg border border-slate-200 animate-fade-in" style="animation-delay: 0.7s;">
+                        <h3 class="text-2xl font-bold text-blue-600"> Chris Lazok </h3>
+                        <p class="text-lg font-semibold text-slate-800 mb-4">Co-Investor, Marketing & Oversight</p>
+                        <div class="mt-6 border-t border-slate-200 pt-6">
+                            <h4 class="font-semibold text-slate-700 mb-3">Key Experience:</h4>
+                            <ul class="space-y-4 text-slate-600 text-sm">
+                                <li class="flex items-start">
+                                    <span class="font-bold text-blue-600 mr-2 mt-1">▶</span>
+                                    <div><span class="font-semibold">Founder & Digital Strategist</span><br>Successfully launched and scaled multiple e-commerce brands using targeted SEO and ad campaigns.</div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="font-bold text-blue-600 mr-2 mt-1">▶</span>
+                                    <div><span class="font-semibold">Marketing Consultant</span><br>Advised hospitality clients on digital turnaround strategies, increasing online bookings by over 200%.</div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <a href="https://www.linkedin.com/in/2816902992/" target="_blank" rel="noopener noreferrer" class="inline-block bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-300">
+                                View Full Profile on LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page 3: The Deal -->
+        <section id="deal-page" class="page-content py-12 md:py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Headline -->
+                <div class="text-center animate-fade-in" style="animation-delay: 0.1s;">
+                    <h2 class="text-base font-semibold text-blue-600 tracking-wide uppercase">The Deal</h2>
+                    <p class="mt-2 text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight">
+                        A Clean Structure for a Profitable Partnership.
+                    </p>
+                </div>
+
+                <!-- Section 1: Clean Box Structure -->
+                <div class="mt-16 bg-white p-8 rounded-2xl shadow-lg border border-slate-200 animate-fade-in" style="animation-delay: 0.3s;">
+                    <h3 class="text-2xl font-bold text-slate-900 text-center mb-10">The "Clean Box" Structure</h3>
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-center">
+                        
+                        <!-- Investors Card -->
+                        <div class="flow-item w-full md:w-1/4 bg-slate-100 p-6 rounded-xl border border-slate-200" id="flow-1">
+                            <svg class="w-10 h-10 mx-auto text-slate-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a3.002 3.002 0 013.39-2.432M12 6a3 3 0 110-6 3 3 0 010 6z" /></svg>
+                            <h4 class="text-lg font-bold text-slate-800">Investors</h4>
+                        </div>
+
+                        <!-- Arrow 1 -->
+                        <div class="flow-arrow w-full md:w-auto flex-grow flex flex-col items-center justify-center px-4" id="flow-arrow-1">
+                            <span class="text-sm font-semibold text-slate-700 mb-1">$430k</span>
+                            <svg class="w-16 md:w-full h-8 text-blue-500" fill="none" viewBox="0 0 24 12" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M1 6h22m0 0l-5-5m5 5l-5 5" /></svg>
+                        </div>
+
+                        <!-- New LLC Card -->
+                        <div class="flow-item w-full md:w-1/3 bg-blue-50 p-6 rounded-xl border-2 border-blue-500 shadow-lg" id="flow-2">
+                            <svg class="w-10 h-10 mx-auto text-blue-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <h4 class="text-lg font-bold text-blue-800">Brand New "Play 5.0 LLC"</h4>
+                            <p class="text-xs text-blue-700">Clean & Debt-Free</p>
+                        </div>
+
+                        <!-- Arrow 2 -->
+                        <div class="flow-arrow w-full md:w-auto flex-grow flex flex-col items-center justify-center px-4" id="flow-arrow-2">
+                            <span class="text-sm font-semibold text-slate-700 mb-1">Buys Assets</span>
+                            <svg class="w-16 md:w-full h-8 text-slate-400" fill="none" viewBox="0 0 24 12" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M1 6h22m0 0l-5-5m5 5l-5 5" /></svg>
+                        </div>
+
+                        <!-- Old LLC Card -->
+                        <div class="flow-item w-full md:w-1/4 bg-red-50 p-6 rounded-xl border border-red-300" id="flow-3">
+                            <svg class="w-10 h-10 mx-auto text-red-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                            <h4 class="text-lg font-bold text-red-800">Seller's Old LLC</h4>
+                            <p class="text-xs text-red-700">Liabilities Remain Here</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-center max-w-3xl mx-auto mt-8">
+                        This deal is <span class="text-slate-900 font-semibold">100% clean.</span> The investment is made into a <span class="glitter-text">brand-new, debt-free LLC.</span> We are only buying the assets (license, lease, equipment), not the seller's liabilities, tax burdens, or past debts.
+                    </p>
+                </div>
+
+                <!-- Section 2: Use of Funds -->
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 animate-slide-in-left" style="animation-delay: 0.5s;">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-6">Use of Funds (Total: $430,000)</h3>
+                        <div class="flex items-center justify-center space-x-8">
+                            <!-- Donut Chart -->
+                            <div class="relative w-48 h-48">
+                                <svg class="w-full h-full" viewBox="0 0 100 100">
+                                    <!-- Background Circle -->
+                                    <circle cx="50" cy="50" r="42" fill="none" stroke="#e2e8f0" stroke-width="16"></circle>
+                                    
+                                    <!-- Segments (stroke-dasharray = % of circumference: 2 * pi * r = 2 * 3.14159 * 42 = 264) -->
+                                    <!-- 1. Asset Acq: 46.5% (122.7) -->
+                                    <circle id="donut-seg-1" class="donut-segment" cx="50" cy="50" r="42" fill="none" stroke="#2563eb" stroke-width="16" stroke-dasharray="122.7 141.3" stroke-dashoffset="264" transform="rotate(-90 50 50)"></circle>
+                                    <!-- 2. Operating: 20.9% (55.2) (offset by 122.7) -->
+                                    <circle id="donut-seg-2" class="donut-segment" cx="50" cy="50" r="42" fill="none" stroke="#3b82f6" stroke-width="16" stroke-dasharray="55.2 208.8" stroke-dashoffset="141.3" transform="rotate(-90 50 50)"></circle>
+                                    <!-- 3. Start-Up: 16.3% (43) (offset by 122.7 + 55.2 = 177.9) -->
+                                    <circle id="donut-seg-3" class="donut-segment" cx="50" cy="50" r="42" fill="none" stroke="#60a5fa" stroke-width="16" stroke-dasharray="43 221" stroke-dashoffset="86.1" transform="rotate(-90 50 50)"></circle>
+                                    <!-- 4. Renovation: 9.3% (24.5) (offset by 177.9 + 43 = 220.9) -->
+                                    <circle id="donut-seg-4" class="donut-segment" cx="50" cy="50" r="42" fill="none" stroke="#93c5fd" stroke-width="16" stroke-dasharray="24.5 239.5" stroke-dashoffset="43.1" transform="rotate(-90 50 50)"></circle>
+                                    <!-- 5. Securing: 7.0% (18.5) (offset by 220.9 + 24.5 = 245.4) -->
+                                    <circle id="donut-seg-5" class="donut-segment" cx="50" cy="50" r="42" fill="none" stroke="#cbd5e1" stroke-width="16" stroke-dasharray="18.5 245.5" stroke-dashoffset="18.6" transform="rotate(-90 50 50)"></circle>
+                                    
+                                    <text x="50" y="50" font-family="Inter" font-size="16" font-weight="bold" fill="#0f172a" text-anchor="middle" dy=".3em">$430k</text>
+                                </svg>
+                            </div>
+                            <!-- Legend -->
+                            <ul class="space-y-2 text-sm text-slate-700">
+                                <li><span class="inline-block w-3 h-3 rounded-full bg-blue-600 mr-2"></span>Asset Acq: $200,000</li>
+                                <li><span class="inline-block w-3 h-3 rounded-full bg-blue-500 mr-2"></span>Operating Cap: $90,000</li>
+                                <li><span class="inline-block w-3 h-3 rounded-full bg-blue-400 mr-2"></span>Start-Up Cap: $70,000</li>
+                                <li><span class="inline-block w-3 h-3 rounded-full bg-blue-300 mr-2"></span>Renovation Fee: $40,000</li>
+                                <li><span class="inline-block w-3 h-3 rounded-full bg-slate-300 mr-2"></span>Securing Ops: $30,000</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Our Terms -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 animate-slide-in-right" style="animation-delay: 0.5s;">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-6">Our Terms</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <svg class="flex-shrink-0 h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <div class="ml-3">
+                                    <h4 class="text-lg font-semibold text-slate-900">Full Transparency</h4>
+                                    <p class="text-slate-600">Monthly electronic financial reports for all partners.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="flex-shrink-0 h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <div class="ml-3">
+                                    <h4 class="text-lg font-semibold text-slate-900">Aligned Incentives</h4>
+                                    <p class="text-slate-600">Operators are paid via a combination of a fixed salary (business expense) and equity.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="flex-shrink-0 h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <div class="ml-3">
+                                    <h4 class="text-lg font-semibold text-slate-900">Investor-Protected</h4>
+                                    <p class="text-slate-600">Clear Buy-Sell agreement gives the operator the option to buy back investor equity at a pre-set 2x multiple.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Section 4: 2-Year Projection -->
+                <div class="mt-10 bg-white p-8 rounded-2xl shadow-lg border border-slate-200 animate-fade-in" style="animation-delay: 0.8s;">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">The "Exit" (Buy-Back) Payday</h3>
+                    <p class="text-slate-600 mb-6">
+                        The operator has the option to buy out investors at a pre-set multiple, providing a clear exit strategy.
+                        <span class="block text-sm italic text-slate-500 mt-2">Assumed Business Valuation at Year 2: $360,000 (based on 3x EBITDA).</span>
+                    </p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full min-w-max text-left text-slate-700">
+                            <thead class="border-b border-slate-300">
+                                <tr>
+                                    <th class="p-3 text-sm font-semibold text-slate-900">Partner</th>
+                                    <th class="p-3 text-sm font-semibold text-slate-900">Contribution</th>
+                                    <th class="p-3 text-sm font-semibold text-slate-900">Equity</th>
+                                    <th class="p-3 text-sm font-semibold text-slate-900">2-Yr Cash Dividends</th>
+                                    <th class="p-3 text-sm font-semibold text-slate-900">Exit / Buy-Back</th>
+                                    <th class="p-3 text-sm font-semibold text-blue-600">Total 2-Yr Return</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-slate-200">
+                                    <td class="p-3 font-medium">Lead Investor</td>
+                                    <td class="p-3">$380,000</td>
+                                    <td class="p-3">45.0%</td>
+                                    <td class="p-3">~$23,400</td>
+                                    <td class="p-3">$760,000</td>
+                                    <td class="p-3 font-bold text-blue-600">$783,400</td>
+                                </tr>
+                                <tr class="border-b border-slate-200">
+                                    <td class="p-3 font-medium">Chris (Growth)</td>
+                                    <td class="p-3">$20,000 + Sweat</td>
+                                    <td class="p-3">9.5%</td>
+                                    <td class="p-3">~$4,940</td>
+                                    <td class="p-3">$34,200</td>
+                                    <td class="p-3 font-bold text-blue-600">$39,140</td>
+                                </tr>
+                                <tr class="border-b border-slate-200">
+                                    <td class="p-3 font-medium">Brian (Ops)</td>
+                                    <td class="p-3">Sweat Equity</td>
+                                    <td class="p-3">45.5%</td>
+                                    <td class="p-3">~$23,660</td>
+                                    <td class="p-3 text-slate-400">(He is the Buyer)</td>
+                                    <td class="p-3 font-bold text-blue-600">$143,660*</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Interactive Calculator Section -->
+                <div class="mt-10 bg-white p-8 rounded-2xl shadow-lg border border-slate-200 animate-fade-in" style="animation-delay: 0.9s;">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Interactive Return Calculator</h3>
+                    <p class="text-slate-600 mb-6">
+                        Use the slider to see how your potential return changes based on your contribution. The model assumes other partners' stakes adjust proportionally.
+                    </p>
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-6">
+                        <!-- Slider -->
+                        <div class="mb-6">
+                            <label for="contribution-slider" class="block text-sm font-medium text-slate-700">Your Contribution: <span id="contribution-value" class="font-bold text-blue-600 text-lg">$380,000</span></label>
+                            <input id="contribution-slider" type="range" min="380000" max="500000" step="10000" value="430000" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600 mt-2">
+                        </div>
+
+                        <!-- Results Grid -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="bg-white p-4 rounded-lg border">
+                                <h4 class="text-sm font-semibold text-slate-500">Your Equity</h4>
+                                <p id="equity-value" class="text-2xl font-bold text-slate-800 mt-1"></p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border">
+                                <h4 class="text-sm font-semibold text-slate-500">2-Yr Dividends</h4>
+                                <p id="dividends-value" class="text-2xl font-bold text-slate-800 mt-1"></p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border">
+                                <h4 class="text-sm font-semibold text-slate-500">Exit / Buy-Back</h4>
+                                <p id="buyback-value" class="text-2xl font-bold text-slate-800 mt-1"></p>
+                            </div>
+                            <div id="total-return-box" class="p-4 rounded-lg border transition-colors duration-300">
+                                <h4 class="text-sm font-semibold text-blue-200">Total Return</h4>
+                                <p id="total-return-value" class="text-2xl font-bold mt-1"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-center text-sm text-slate-500 mt-4">
+                        This calculator is for modeling purposes. The "Use of Funds" target is <span class="font-bold">$430,000</span>.
+                    </p>
+                </div>
+
+
+                <!-- Final CTA -->
+                <div class="mt-16 text-center animate-fade-in" style="animation-delay: 0.9s;">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900">Let's build this.</h2>
+                    <p class="mt-4 text-xl md:text-2xl font-semibold text-blue-600">
+                        [Your Name] | [Your Phone] | [Your Email]
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-20">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center text-slate-400">
+            <p>&copy; 2025 Play 5.0 LLC. This document is confidential and intended solely for the person to whom it is addressed.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-tab');
+            const pages = document.querySelectorAll('.page-content');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const contributionSlider = document.getElementById('contribution-slider');
+
+
+            // --- Navigation Logic ---
+            
+            function showPage(pageId) {
+                // Hide all pages
+                pages.forEach(page => {
+                    page.style.display = 'none';
+                });
+
+                // Show the target page
+                const activePage = document.getElementById(`${pageId}-page`);
+                if (activePage) {
+                    activePage.style.display = 'block';
+                }
+
+                // Update nav link active state
+                navLinks.forEach(link => {
+                    if (link.dataset.page === pageId) {
+                        link.classList.add('bg-blue-600', 'text-white', 'shadow-md');
+                        link.classList.remove('text-slate-500', 'hover:bg-slate-100', 'hover:text-slate-900', 'animate-glow');
+                        link.style.animation = 'none'; // Stop animation on active tab
+                    } else {
+                        link.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
+                        link.classList.add('text-slate-500', 'hover:bg-slate-100', 'hover:text-slate-900', 'animate-glow');
+                        link.style.animation = 'glow 3s ease-in-out infinite'; // Apply animation
+                    }
+                });
+
+                // Close mobile menu
+                mobileMenu.classList.add('hidden');
+
+                // Trigger animations for the specific page
+                if (pageId === 'opportunity') {
+                    animateBarChart();
+                } else if (pageId === 'deal') {
+                    animateFlowChart();
+                    animateDonutChart();
+                    setupCalculator();
+                }
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    showPage(e.target.dataset.page);
+                });
+            });
+
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Show the first page by default
+            showPage('opportunity');
+
+            // --- Animation Triggers ---
+
+            // 1. Bar Chart Animation
+            function animateBarChart() {
+                const bars = [
+                    { id: 'bar-play', height: '22%' },
+                    { id: 'bar-comp1', height: '93%' },
+                    { id: 'bar-comp2', height: '65%' },
+                    { id: 'bar-comp3', height: '64%' }
+                ];
+                
+                bars.forEach((barData, index) => {
+                    const bar = document.getElementById(barData.id);
+                    if (bar) {
+                        // Reset height to 0
+                        bar.style.height = '0';
+                        // Set target height after a brief delay
+                        setTimeout(() => {
+                            bar.style.height = barData.height;
+                        }, 100 + index * 100);
+                    }
+                });
+            }
+
+            // 2. Flow Chart Animation
+            function animateFlowChart() {
+                const items = ['flow-1', 'flow-arrow-1', 'flow-2', 'flow-arrow-2', 'flow-3'];
+                items.forEach((id, index) => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.style.opacity = 0; // Reset
+                        el.style.transform = el.classList.contains('flow-arrow') ? 'scaleX(0.5)' : 'translateY(20px)';
+                        
+                        setTimeout(() => {
+                            el.style.opacity = 1;
+                            el.style.transform = el.classList.contains('flow-arrow') ? 'scaleX(1)' : 'translateY(0)';
+                        }, 200 + index * 200);
+                    }
+                });
+            }
+
+            // 3. Donut Chart Animation
+            function animateDonutChart() {
+                const segments = [
+                    { id: 'donut-seg-1', offset: 141.3 }, // 264 - 122.7 = 141.3
+                    { id: 'donut-seg-2', offset: 86.1 },  // 141.3 - 55.2 = 86.1
+                    { id: 'donut-seg-3', offset: 43.1 },  // 86.1 - 43 = 43.1
+                    { id: 'donut-seg-4', offset: 18.6 },  // 43.1 - 24.5 = 18.6
+                    { id: 'donut-seg-5', offset: 0.1 }     // 18.6 - 18.5 = 0.1 (approx 0)
+                ];
+                
+                segments.forEach((seg, index) => {
+                    const el = document.getElementById(seg.id);
+                    if (el) {
+                        // Reset offset
+                        el.style.strokeDashoffset = '264';
+                        // Animate to target offset
+                        setTimeout(() => {
+                            el.style.strokeDashoffset = seg.offset;
+                        }, 300 + index * 100);
+                    }
+                });
+            }
+
+            // 4. Interactive Calculator
+            function setupCalculator() {
+                if (!contributionSlider) return;
+
+                const contributionValueEl = document.getElementById('contribution-value');
+                const equityValueEl = document.getElementById('equity-value');
+                const dividendsValueEl = document.getElementById('dividends-value');
+                const buybackValueEl = document.getElementById('buyback-value');
+                const totalReturnEl = document.getElementById('total-return-value');
+                const totalReturnBox = document.getElementById('total-return-box');
+
+                function updateCalculator() {
+                    const contribution = parseInt(contributionSlider.value);
+                    
+                    // --- Base Values from the deal ---
+                    const totalCashInvestment = 400000; // $380k (Lead) + $20k (Chris)
+                    const cashEquityPool = 54.5; // 45% (Lead) + 9.5% (Chris)
+                    const chrisCash = 20000;
+                    const totalDividendsPool = 48340; // $23,400 + $4,940 + $23,660
+                    const exitValuation = 360000;
+                    const leadBuyoutMultiple = 2; // 2x multiple on initial investment
+
+                    // --- Calculations ---
+                    const newTotalCash = contribution + chrisCash;
+                    const leadEquity = (contribution / newTotalCash) * cashEquityPool;
+                    
+                    // Dividends are proportional to equity share of the cash pool
+                    const leadDividendShare = leadEquity / cashEquityPool;
+                    const leadDividends = totalDividendsPool * leadDividendShare;
+
+                    const leadBuyback = contribution * leadBuyoutMultiple;
+                    const totalReturn = leadDividends + leadBuyback;
+
+                    // --- Update UI ---
+                    contributionValueEl.textContent = `$${contribution.toLocaleString()}`;
+                    equityValueEl.textContent = `${leadEquity.toFixed(1)}%`;
+                    dividendsValueEl.textContent = `~$${Math.round(leadDividends / 1000)}k`;
+                    buybackValueEl.textContent = `$${Math.round(leadBuyback / 1000)}k`;
+                    totalReturnEl.textContent = `$${Math.round(totalReturn / 1000)}k`;
+
+                    // --- Conditional Styling ---
+                    const targetContribution = 430000;
+                    if (contribution >= targetContribution) {
+                        // Apply glitter style for meeting/exceeding target
+                        totalReturnEl.classList.add('glitter-text');
+                        totalReturnBox.classList.add('bg-blue-600', 'text-white', 'border-blue-700');
+                        totalReturnBox.classList.remove('bg-slate-100', 'text-slate-700');
+                    } else {
+                        // Apply dull/pastel style for being below target
+                        totalReturnEl.classList.remove('glitter-text');
+                        totalReturnBox.classList.remove('bg-blue-600', 'text-white', 'border-blue-700');
+                        totalReturnBox.classList.add('bg-slate-100', 'text-slate-700');
+                    }
+                }
+
+                contributionSlider.addEventListener('input', updateCalculator);
+                
+                // Initial calculation
+                updateCalculator();
+            }
+
+        });
+    </script>
+</body>
+</html>
